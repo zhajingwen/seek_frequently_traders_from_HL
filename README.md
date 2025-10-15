@@ -12,7 +12,7 @@ https://apexliquid.bot/home
 - 最少交易10天
 - 收益率最少为5%
 - 最大回撤80%
-
+数据来源页面：https://apexliquid.bot/topTraders
 数据来源接口：https://apexliquid.bot/v1/web/top_trades
 获取方法：POST
 {"pagination":{"page_number":1,"page_size":1000},"sort_options":[{"field":"dayRoe","descending":true}],"time_range":"DAY","minTradeAge":"10","maxMaxDrawdown":"80","minWeekRoe":"5","minMonthRoe":"5","minAllTimeRoe":"5","telegram_id":""}
