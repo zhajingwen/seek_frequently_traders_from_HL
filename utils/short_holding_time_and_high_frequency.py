@@ -52,15 +52,14 @@ class AverageHoldingTimeAnalyzer:
         判断是否为现货交易
         
         现货交易的特征：
-        1. coin字段包含'/'（如 'BTC/USDC'）
-        2. 或者通过其他字段判断（如crossed字段为'spot'）
+        1. dir字段的值为Buy或者Sell
         """
-        coin = fill.get('coin', '')
-        if '/' in coin:
+        direction = fill['dir']
+        # 现货的特征
+        if direction in ['Buy', 'Sell']:
             return True
-        if fill.get('crossed') == 'spot':
-            return True
-        return False
+        else:
+            return False
     
     def calculate_average_holding_time(self):
         """
