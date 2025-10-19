@@ -136,6 +136,7 @@ class AverageHoldingTimeAnalyzer:
             # 拿到对应代币开仓数据中最早的一条开仓订单；
             position = positions[coin][0]
             
+            # 如果对应代币最早的一个开仓订单的size小于当前新增的一个平仓订单的size
             if position['size'] <= remaining_size:
                 # 完全平掉这个仓位
                 holding_time_ms = time - position['time']
@@ -152,8 +153,9 @@ class AverageHoldingTimeAnalyzer:
                 
                 holding_times[coin].append(close_record)
                 self.all_closes.append(close_record)  # 记录所有平仓
-                
+                # 更新当前平仓订单的size被扣减后的剩余量
                 remaining_size -= position['size']
+                # 将计算过持仓时间的那一条开仓订单数据从存储槽删除
                 positions[coin].pop(0)
             else:
                 # 部分平仓
@@ -171,8 +173,9 @@ class AverageHoldingTimeAnalyzer:
                 
                 holding_times[coin].append(close_record)
                 self.all_closes.append(close_record)  # 记录所有平仓
-                
+                # 历史开仓的订单只被当前的一个平仓单平掉了一部分，在存储槽更新其剩余量
                 position['size'] -= remaining_size
+                # 刷新当前的平仓订单的size已经被消耗完了
                 remaining_size = 0
     
     def get_close_frequency_stats(self):
