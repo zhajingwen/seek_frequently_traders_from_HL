@@ -103,7 +103,10 @@ class AverageHoldingTimeAnalyzer:
                 self.spot_holding_times, self.spot_positions)
     
     def _handle_opening(self, coin, size, time, price, is_spot):
-        """处理开仓"""
+        """
+        将每个币的开仓数据塞入自定义的存储槽（KEY为COIN）
+        合约数据和现货数据分槽存储       
+        """
         position_data = {
             'time': time,
             'size': size,
@@ -116,7 +119,11 @@ class AverageHoldingTimeAnalyzer:
             self.perp_positions[coin].append(position_data)
     
     def _handle_closing(self, coin, size, time, is_spot):
-        """处理平仓（FIFO）"""
+        """
+        处理平仓（FIFO）
+        将每个币的开仓数据塞入自定义的存储槽（KEY为COIN）
+        合约数据和现货数据分槽存储    
+        """
         positions = self.spot_positions if is_spot else self.perp_positions
         holding_times = self.spot_holding_times if is_spot else self.perp_holding_times
         
