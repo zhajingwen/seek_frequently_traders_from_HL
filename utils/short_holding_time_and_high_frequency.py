@@ -231,12 +231,18 @@ class AverageHoldingTimeAnalyzer:
         # 三个筛选条件
         meets_recent = freq_stats['recent_24h_close_count'] >= min_recent_closes
         meets_avg = freq_stats['avg_daily_close_count'] >= min_avg_daily_closes
+        # 满足总体平均持仓时间条件
         meets_holding_time = avg_holding_hours <= max_avg_holding_hours
-        
+
+        # 总体平均持仓时间
         freq_stats['avg_holding_hours'] = avg_holding_hours
+        # 满足最近24小时平仓数条件
         freq_stats['meets_recent_criteria'] = meets_recent
+        # 满足平仓频率条件
         freq_stats['meets_avg_criteria'] = meets_avg
+        # 满足持仓时间条件
         freq_stats['meets_holding_time_criteria'] = meets_holding_time
+        # 满足所有条件
         freq_stats['meets_all_criteria'] = meets_recent and meets_avg and meets_holding_time
         
         return meets_recent and meets_avg and meets_holding_time, freq_stats
@@ -340,6 +346,7 @@ class AverageHoldingTimeAnalyzer:
         print(f"  总平仓数: {freq_stats['total_close_count']}")
         print(f"  交易总天数: {freq_stats['total_days']:.2f} 天")
         print(f"  平均每天平仓数: {freq_stats['avg_daily_close_count']:.2f}")
+        print(f"  平均持仓时间: {freq_stats['avg_holding_hours']:.2f} 小时")
         
         if freq_stats.get('first_close_time'):
             print(f"  首次平仓时间: {freq_stats['first_close_time'].strftime('%Y-%m-%d %H:%M:%S')}")
@@ -349,6 +356,7 @@ class AverageHoldingTimeAnalyzer:
         print("\n【筛选条件检查】")
         print(f"  ✓ 最近24小时平仓数 >= 24: {'通过' if freq_stats['meets_recent_criteria'] else '未通过'}")
         print(f"  ✓ 平均每天平仓数 >= 24: {'通过' if freq_stats['meets_avg_criteria'] else '未通过'}")
+        print(f"  ✓ 平均持仓时间 <= 1 小时: {'通过' if freq_stats['meets_holding_time_criteria'] else '未通过'}")
         print(f"\n  综合结果: {'✓ 满足所有条件' if freq_stats['meets_all_criteria'] else '✗ 不满足条件'}")
     
     def print_type_statistics(self, trade_type="合约"):
@@ -407,7 +415,10 @@ class AverageHoldingTimeAnalyzer:
             print(f"  总体加权平均持仓时间: {self.format_time(overall['overall_weighted_avg'])}")
     
     def print_statistics(self):
-        """打印完整的统计信息（合约+现货）"""
+        """
+        详细的历史平仓记录和持仓时间的统计信息打印
+        打印完整的统计信息（合约+现货）
+        """
         print("=" * 80)
         print("Hyperliquid 交易分析报告")
         print(f"地址: {self.user_address}")
@@ -478,17 +489,20 @@ class AverageHoldingTimeAnalyzer:
             
             # 计算持仓时间
             self.calculate_average_holding_time()
-            
-            # 检查是否满足条件
+
+            # 打印详细的历史平仓记录和持仓时间的统计信息
+            self.print_statistics()
+
+            # 检查是否满足高频的筛选条件
             meets_criteria, freq_stats = self.meets_criteria(min_recent_closes, min_avg_daily_closes)
             
             # 打印频率统计
             if freq_stats:
                 self.print_frequency_stats(freq_stats)
             
-            # 如果满足条件且需要显示完整统计，则打印详细信息
-            if meets_criteria and show_full_stats:
-                self.print_statistics()
+            # # 如果满足条件且需要显示完整统计，则打印详细信息
+            # if meets_criteria and show_full_stats:
+            #     self.print_statistics()
             
             return meets_criteria, self.user_address, freq_stats
             
@@ -567,7 +581,8 @@ def main():
     print("=" * 80)
     print("示例1: 分析单个地址")
     print("=" * 80)
-    user_address = "0xf709deb9ca069e53a31a408fde397a87d025a352"
+    # user_address = "0xf709deb9ca069e53a31a408fde397a87d025a352"
+    user_address = "0x5c9c9ab381c841530464ef9ee402568f84c3b676"
     analyzer = AverageHoldingTimeAnalyzer(user_address)
     analyzer.analyze(show_full_stats=True, min_recent_closes=24, min_avg_daily_closes=24)
     
