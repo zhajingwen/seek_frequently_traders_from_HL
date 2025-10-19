@@ -1,20 +1,23 @@
 import requests
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class AverageHoldingTimeAnalyzer:
-    """Hyperliquid交易数据分析器（支持合约和现货）"""
+    """
+    从 Hyperliquid 平台筛选高频交易者
+    """
     
     def __init__(self, user_address):
         """
-        初始化分析器
+        初始化帅选器
         
         Args:
             user_address: 用户地址
         """
         self.user_address = user_address
         self.api_url = "https://api.hyperliquid.xyz/info"
+        # 用户交易数据请求得到的原始响应体
         self.fills = []
         
         # 分别存储合约和现货的数据
@@ -45,6 +48,7 @@ class AverageHoldingTimeAnalyzer:
     
     def _is_spot_trade(self, fill):
         """
+        算法存在严重问题，待修正
         判断是否为现货交易
         
         现货交易的特征：
@@ -86,7 +90,7 @@ class AverageHoldingTimeAnalyzer:
             
             # 判断是开仓还是平仓
             if is_spot:
-                is_opening = direction in ['Buy']
+                is_opening = direction == 'Buy'
             else:
                 is_opening = 'Open' in direction
             
