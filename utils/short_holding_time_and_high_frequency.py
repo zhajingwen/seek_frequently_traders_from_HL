@@ -120,16 +120,20 @@ class AverageHoldingTimeAnalyzer:
     
     def _handle_closing(self, coin, size, time, is_spot):
         """
-        处理平仓（FIFO）
-        将每个币的开仓数据塞入自定义的存储槽（KEY为COIN）
+        处理平仓（FIFO算法）
+        将每个币的平仓数据塞入自定义的存储槽（KEY为COIN）
         合约数据和现货数据分槽存储    
         """
+        # 来自 _handle_opening 方法统计的开仓数据
         positions = self.spot_positions if is_spot else self.perp_positions
+        # 持仓的时间统计槽
         holding_times = self.spot_holding_times if is_spot else self.perp_holding_times
         
+        # 当前这笔平仓订单的仓位大小
         remaining_size = size
         
         while remaining_size > 0 and positions[coin]:
+            # 拿到对应代币开仓数据中最早的一条开仓订单；
             position = positions[coin][0]
             
             if position['size'] <= remaining_size:
