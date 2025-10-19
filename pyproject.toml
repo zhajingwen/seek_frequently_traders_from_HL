@@ -1,7 +1,7 @@
 [project]
 name = "seek-frequently-traders-from-hl"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Python tool for identifying high-frequency traders from Hyperliquid platform by analyzing trading patterns and holding times"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
