@@ -1,7 +1,7 @@
 import json
 from utils.config import address_list
-from utils.average_holding_time import AverageHoldingTimeAnalyzer
-
+# from utils.average_holding_time import AverageHoldingTimeAnalyzer
+from utils.short_holding_time_and_high_frequency import AverageHoldingTimeAnalyzer
 
 address_list = json.loads(address_list)
 trades = address_list.get("data", {}).get("trades", [])

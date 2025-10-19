@@ -577,22 +577,19 @@ def analyze_multiple_addresses(addresses, min_recent_closes=24, min_avg_daily_cl
 def main():
     """主函数"""
     
-    # 示例1: 分析单个地址
-    print("=" * 80)
-    print("示例1: 分析单个地址")
-    print("=" * 80)
-    # user_address = "0xf709deb9ca069e53a31a408fde397a87d025a352"
-    user_address = "0x5c9c9ab381c841530464ef9ee402568f84c3b676"
-    analyzer = AverageHoldingTimeAnalyzer(user_address)
-    analyzer.analyze(show_full_stats=True, min_recent_closes=24, min_avg_daily_closes=24)
+    # # 示例1: 分析单个地址
+    # print("=" * 80)
+    # print("示例1: 分析单个地址")
+    # print("=" * 80)
+    # # user_address = "0xf709deb9ca069e53a31a408fde397a87d025a352"
+    # user_address = "0x5c9c9ab381c841530464ef9ee402568f84c3b676"
+    # analyzer = AverageHoldingTimeAnalyzer(user_address)
+    # analyzer.analyze(show_full_stats=True, min_recent_closes=24, min_avg_daily_closes=24)
     
     # 示例2: 批量分析多个地址
-    # addresses = [
-    #     "0x5c9c9ab381c841530464ef9ee402568f84c3b676",
-    #     "0xf709deb9ca069e53a31a408fde397a87d025a352",
-    #     # 添加更多地址...
-    # ]
-    # qualified = analyze_multiple_addresses(addresses, min_recent_closes=24, min_avg_daily_closes=24)
+    addresses = ['0x17eb41cc719d2b7406acea9bdb1dcf63ecd8067f', '0x40fa3e3a2f6d025a99d9f7706a0aa1769cf04de2', '0xf709deb9ca069e53a31a408fde397a87d025a352', '0x59680982a04c8c921cf0168917f202f2afd6dd54', '0x81f6b887657b679d9e23153ffcd703e111010240', '0xac7bbfed474127e8683320421264d403fd2155f9', '0x1bc11bc37a663bf6e6acdd901d9815738bf6670b', '0xbea190067a74c6333e17add15251aff29fee4d05', '0x223537ac9a856c31f4043e86ced86bb29f06653e', '0x329c787b163a730bd7900df2beb3ff4fe4670375', '0x6f4823e660915982cc7a58ba9287e9d4bb39ae12', '0x7717a7a245d9f950e586822b8c9b46863ed7bd7e', '0x3979bdf742ce46c9dcd570c70d2d6e88b87df0e9', '0xa4178e3b8d7799cd472ceeb63b302b4a1344da19', '0xbe19541903f64af97bcf8436f4d15bf3a56b8bd1', '0xa07843ae68977ca35ecdb540b5be32bc8a7d13bd', '0x641d975e362e5e5cc95ca45347a0bec0b8aba1bc', '0x720c933b5eb30fc37461789ef3264e51f2a7f4af', '0x1a2e6afa298b1cc50939b4b2b0b430e3c1ef3459', '0xefd3ab65915e35105caa462442c9ecc1346728df', '0x126220f27cddaba57d903c51a94caf002b2ed355', '0x723fe6e68bced0a7029d336ba84d5e08080fd5d9', '0x0b9158b2e55729febcdd01d7649159416e68ec3f', '0x6beffb9bec3364ae579fa7cb864effefa7bf2695', '0x4a1b3580f7ac72bc54175f05b76092eeb7a266aa', '0x3ac9b030594c1ef23a3e8fed9f62356b7bf98bf6', '0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00', '0x6f90d048a511626ba5a6425db17f377826df336a', '0x5c9c9ab381c841530464ef9ee402568f84c3b676', '0x023a3d058020fb76cca98f01b3c48c8938a22355', '0xa7d1af5afed57829182b637d78fedff2def2bcc8', '0xae7a0f9f663bb54bfe95378c7e3de7dd6e28d6bc', '0x99f344d0881eb84d450c950c4ee8b3e4fd624aa2']
+    qualified = analyze_multiple_addresses(addresses, min_recent_closes=24, min_avg_daily_closes=24)
+    print(qualified)
 
 
 if __name__ == "__main__":
