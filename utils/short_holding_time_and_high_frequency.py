@@ -151,7 +151,8 @@ class AverageHoldingTimeAnalyzer:
                 }
                 
                 holding_times[coin].append(close_record)
-                self.all_closes.append(close_record)  # 记录所有平仓
+                # 记录所有平仓（准备提供给后续的统计算法使用，计算平仓的频率）
+                self.all_closes.append(close_record)  
                 # 更新当前平仓订单的size被扣减后的剩余量
                 remaining_size -= position['size']
                 # 将计算过持仓时间的那一条开仓订单数据从存储槽删除
@@ -180,15 +181,17 @@ class AverageHoldingTimeAnalyzer:
     def get_close_frequency_stats(self):
         """
         获取平仓频率统计
-        
+        依赖 _handle_closing 方法将平仓数据塞入对应的存储槽
         Returns:
             dict: 包含各项频率统计的字典
         """
+        # _handle_closing 方法产生的平仓统计数据，如果为空，意味着没有任何平仓记录
         if not self.all_closes:
             return None
         
         # 获取当前时间（毫秒）
         now_ms = datetime.now().timestamp() * 1000
+        # 一天前的时间戳
         one_day_ago_ms = now_ms - (24 * 60 * 60 * 1000)
         
         # 统计最近1天的平仓数
