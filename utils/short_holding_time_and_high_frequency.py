@@ -1,7 +1,7 @@
 import requests
 from collections import defaultdict
 from datetime import datetime
-
+from retry import retry
 
 class AverageHoldingTimeAnalyzer:
     """
@@ -29,6 +29,7 @@ class AverageHoldingTimeAnalyzer:
         # 平仓记录（用于时间筛选）
         self.all_closes = []  # 所有平仓记录，包含时间戳
     
+    @retry(tries=6, delay=3)
     def fetch_user_fills(self):
         """获取用户的成交记录"""
         headers = {
