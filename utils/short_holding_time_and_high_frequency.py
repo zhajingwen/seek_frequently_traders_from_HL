@@ -48,7 +48,6 @@ class AverageHoldingTimeAnalyzer:
     
     def _is_spot_trade(self, fill):
         """
-        算法存在严重问题，待修正
         判断是否为现货交易
         
         现货交易的特征：
@@ -590,6 +589,7 @@ def analyze_multiple_addresses(addresses, min_recent_closes=24, min_avg_daily_cl
             print(f"    - 最近24小时平仓数: {stats['recent_24h_close_count']}")
             print(f"    - 平均每天平仓数: {stats['avg_daily_close_count']:.2f}")
             print(f"    - 总平仓数: {stats['total_close_count']}")
+            print(f"    - 平均持仓时间: {stats['avg_holding_hours']:.2f} 小时")
     
     return qualified_addresses
 

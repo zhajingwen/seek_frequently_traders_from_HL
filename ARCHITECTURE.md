@@ -55,9 +55,11 @@ def calculate_average_holding_time(self):
 ```
 
 ##### 频率统计
+频率统计通过在平仓处理时累积 `all_closes`，随后由以下方法聚合：
+
 ```python
-def analyze_trading_frequency(self):
-    """分析交易频率"""
+def get_close_frequency_stats(self):
+    """获取平仓频率统计（最近24h、总体日均）"""
 ```
 
 ### 3. 筛选逻辑模块
@@ -109,15 +111,20 @@ classDiagram
         -api_url: str
         -fills: list
         -perp_holding_times: dict
+        -perp_positions: dict
         -spot_holding_times: dict
+        -spot_positions: dict
         -all_closes: list
         
         +fetch_user_fills()
         +calculate_average_holding_time()
-        +analyze_trading_frequency()
-        +analyze()
-        -_is_spot_trade()
-        -_calculate_holding_time()
+        +get_close_frequency_stats()
+        +get_overall_statistics(is_spot: Optional[bool])
+        +get_coin_statistics(coin: str, is_spot: bool)
+        +analyze(...)
+        -_is_spot_trade(fill)
+        -_handle_opening(...)
+        -_handle_closing(...)
     }
 ```
 
@@ -126,30 +133,19 @@ classDiagram
 ### 1. 交易类型识别算法
 ```python
 def _is_spot_trade(self, fill):
-    # 现货交易特征：
-    # 1. coin字段包含'/'（如 'BTC/USDC'）
-    # 2. 或者通过其他字段判断
-    return '/' in fill.get('coin', '')
+    # 现货：dir 为 Buy/Sell；合约：dir 中包含 Open/Close
+    direction = fill['dir']
+    return direction in ['Buy', 'Sell']
 ```
 
-### 2. 持仓时间计算算法
-```python
-def _calculate_holding_time(self, open_fill, close_fill):
-    # 计算开仓和平仓之间的时间差
-    open_time = datetime.fromtimestamp(open_fill['time'] / 1000)
-    close_time = datetime.fromtimestamp(close_fill['time'] / 1000)
-    return (close_time - open_time).total_seconds() / 3600  # 小时
-```
+### 2. 持仓时间计算与 FIFO 平仓匹配
+在 `_handle_opening` 与 `_handle_closing` 中以 FIFO 匹配开/平仓并累积 `holding_time_hours`。
 
-### 3. 频率筛选算法
-```python
-def meets_frequency_criteria(self, min_recent_closes=24, min_avg_daily_closes=24):
-    recent_closes = self.get_recent_closes_count()
-    avg_daily_closes = self.get_average_daily_closes()
-    
-    return (recent_closes >= min_recent_closes and 
-            avg_daily_closes >= min_avg_daily_closes)
-```
+### 3. 频率与综合条件
+`get_close_frequency_stats` 统计最近24h平仓数与总体日均平仓数；`meets_criteria` 综合校验：
+- 最近24小时平仓数 ≥ 阈值
+- 平均每天平仓数 ≥ 阈值
+- 总体平均持仓时间 ≤ 1 小时
 
 ## 性能考虑
 
